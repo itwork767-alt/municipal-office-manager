@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Municipal Office Manager</title>
+<style>
+:root{--navy:#142b4a;--blue:#2463a6;--gold:#e6b84a;--bg:#f3f6fa;--ink:#243247;--muted:#718096;--line:#e3e9f1;--white:#fff;--green:#16845b;--red:#c34242}
+*{box-sizing:border-box}body{margin:0;font:14px/1.5 Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.app{min-height:100vh;display:grid;grid-template-columns:245px 1fr}
+.sidebar{background:var(--navy);color:#fff;padding:22px 14px;display:flex;flex-direction:column;gap:18px}.brand{padding:4px 10px 18px;border-bottom:1px solid #ffffff22}.brand b{font-size:18px;letter-spacing:.4px}.brand small{display:block;color:#c8d5e6;margin-top:4px}.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:#dce6f2;text-align:left;padding:11px 12px;border-radius:8px}.nav button:hover,.nav button.active{background:#ffffff19;color:#fff}.nav button span{display:inline-block;width:25px}.side-note{margin-top:auto;color:#b8c8dc;font-size:12px;padding:10px}
+.main{min-width:0}.topbar{height:70px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;gap:12px}.topbar h1{font-size:19px;margin:0;color:var(--navy)}.top-actions{display:flex;align-items:center;gap:10px}.content{padding:26px;max-width:1500px;margin:auto}.page{display:none}.page.active{display:block}.muted{color:var(--muted)}.small{font-size:12px}.btn{border:0;border-radius:7px;padding:10px 14px;background:var(--blue);color:#fff;font-weight:600}.btn:hover{filter:brightness(.94)}.btn.secondary{background:#eaf0f7;color:var(--navy)}.btn.gold{background:var(--gold);color:#30270f}.btn.danger{background:#faeaea;color:var(--red)}.btn:disabled{opacity:.5;cursor:not-allowed}.status{font-size:12px;padding:7px 10px;border-radius:20px;background:#f1f4f8;color:#526174}.status.ok{background:#e6f5ed;color:var(--green)}.status.bad{background:#fff0f0;color:var(--red)}
+.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:20px}.stat,.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}.stat .label{color:var(--muted);font-size:12px}.stat strong{display:block;font-size:28px;color:var(--navy);margin-top:7px}.panel h2,.panel h3{margin:0 0 14px;color:var(--navy)}.two{grid-template-columns:1.15fr .85fr}.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.quick button{background:#f5f8fc;border:1px solid var(--line);border-radius:9px;padding:15px;text-align:left;color:var(--navy);font-weight:600}.quick button span{display:block;font-size:22px;margin-bottom:7px}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:15px}.toolbar .left,.toolbar .right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+input,select,textarea{width:100%;border:1px solid #d7e0eb;border-radius:7px;padding:10px;background:#fff;color:var(--ink);outline:none}input:focus,select:focus,textarea:focus{border-color:#6d9bd0;box-shadow:0 0 0 3px #2463a618}label{display:block;font-size:12px;font-weight:700;color:#536176;margin:0 0 5px}.field{margin-bottom:13px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.form-grid .full{grid-column:1/-1}textarea{min-height:100px;resize:vertical}.editor{min-height:340px;font-family:Georgia,serif;line-height:1.75}.table-wrap{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:10px}table{width:100%;border-collapse:collapse;min-width:700px}th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#f7f9fc;color:#526174;font-size:12px}td{font-size:13px}tr:last-child td{border-bottom:0}.pill{display:inline-block;padding:3px 8px;border-radius:20px;background:#edf3fa;color:#365c86;font-size:11px}.empty{text-align:center;padding:30px;color:var(--muted)}.notice{padding:12px 14px;background:#fff8e6;border:1px solid #f1dfad;border-radius:8px;color:#70591b;margin-bottom:16px}.hidden{display:none!important}.modal-backdrop{position:fixed;inset:0;background:#0b1b2dcc;display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.modal-backdrop.show{display:flex}.modal{background:#fff;border-radius:12px;padding:22px;width:min(760px,100%);max-height:90vh;overflow:auto}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.modal-head h2{margin:0;color:var(--navy)}.close{border:0;background:#eef2f7;border-radius:7px;padding:6px 10px}.toast{position:fixed;right:20px;bottom:20px;background:#142b4a;color:#fff;padding:12px 16px;border-radius:8px;box-shadow:0 8px 25px #0002;display:none;z-index:20}.toast.show{display:block}.hint{font-size:12px;color:var(--muted);margin-top:5px}.letter-paper{background:#fff;padding:35px;max-width:850px;margin:15px auto;border:1px solid var(--line);min-height:500px}.letter-paper h2{text-align:center}.actions{display:flex;gap:7px;flex-wrap:wrap}.file-link{color:var(--blue);text-decoration:none}
+@media(max-width:950px){.app{grid-template-columns:205px 1fr}.stats{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
+@media(max-width:700px){.app{display:block}.sidebar{padding:12px;gap:10px}.brand{border:0;padding:4px 8px}.nav{grid-template-columns:repeat(3,1fr)}.nav button{font-size:12px;padding:9px 7px}.nav button span{width:auto;margin-right:4px}.side-note{display:none}.topbar{height:auto;padding:13px 16px}.content{padding:15px}.stats{gap:9px}.stat{padding:13px}.stat strong{font-size:23px}.quick{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}}
+@media print{body{background:#fff}.sidebar,.topbar,.no-print,footer{display:none!important}.app{display:block}.content{padding:0;max-width:none}.page{display:none!important}#printArea{display:block!important}.letter-paper{border:0;margin:0;padding:15mm;max-width:none;min-height:0}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+ <div class="brand"><b>▣ MUNICIPAL OFFICE</b><small>Office File Management System</small></div>
+ <nav class="nav">
+  <button class="active" data-page="dashboard"><span>▦</span>Dashboard</button>
+  <button data-page="letters"><span>✎</span>Letter Writing</button>
+  <button data-page="files"><span>▤</span>File Register</button>
+  <button data-page="incoming"><span>⇩</span>Incoming Register</button>
+  <button data-page="outgoing"><span>⇧</span>Outgoing Register</button>
+  <button data-page="documents"><span>▣</span>Documents</button>
+  <button data-page="search"><span>⌕</span>Search</button>
+  <button data-page="backup"><span>◉</span>Backup & Restore</button>
+  <button data-page="settings"><span>⚙</span>Drive Settings</button>
+ </nav>
+ <div class="side-note">Single-user workspace<br>Data stored in your Google Drive</div>
+</aside>
+<main class="main">
+ <div class="topbar">
+  <h1 id="pageTitle">Dashboard</h1>
+  <div class="top-actions"><span id="driveStatus" class="status bad">Not connected to Drive</span><button class="btn" id="connectBtn">Connect Google Drive</button></div>
+ </div>
+ <div class="content">
+  <section class="page active" id="dashboard">
+   <div class="notice"><b>Getting started:</b> Add your Google OAuth Client ID in Drive Settings, enable the Google Drive API for that project, then connect. Your records and uploaded PDFs will be stored in your own Drive.</div>
+   <div class="grid stats">
+    <div class="stat"><div class="label">Total Files</div><strong id="statFiles">0</strong></div>
+    <div class="stat"><div class="label">Letters Drafted</div><strong id="statLetters">0</strong></div>
+    <div class="stat"><div class="label">Incoming Letters</div><strong id="statIncoming">0</strong></div>
+    <div class="stat"><div class="label">Outgoing Letters</div><strong id="statOutgoing">0</strong></div>
+   </div>
+   <div class="grid two">
+    <div class="panel"><h2>Quick Actions</h2><div class="quick">
+     <button onclick="navigate('letters')"><span>✎</span>Write a Letter</button>
+     <button onclick="openRegisterModal('file')"><span>▤</span>New File</button>
+     <button onclick="openRegisterModal('incoming')"><span>⇩</span>Receive Letter</button>
+     <button onclick="openRegisterModal('outgoing')"><span>⇧</span>Dispatch Letter</button>
+     <button onclick="navigate('documents')"><span>▣</span>Upload PDF</button>
+     <button onclick="navigate('backup')"><span>◉</span>Backup Data</button>
+    </div></div>
+    <div class="panel"><h2>Recent Activity</h2><div id="recentActivity" class="muted">Connect Google Drive to load your office records.</div></div>
+   </div>
+  </section>
+
+  <section class="page" id="letters">
+   <div class="toolbar"><div><h2 style="margin:0;color:var(--navy)">Letter Writing</h2><div class="muted small">Create, save and print official correspondence</div></div><div class="actions"><button class="btn secondary" onclick="newLetter()">New Letter</button><button class="btn gold" onclick="printLetter()">Print / Save PDF</button><button class="btn" onclick="saveLetter()">Save to Drive</button></div></div>
+   <div class="panel">
+    <div class="form-grid">
+     <div class="field"><label>Template</label><select id="letterType" onchange="applyTemplate()"><option>Official Letter</option><option>Office Order</option><option>Notice</option><option>Memo</option><option>Forwarding Letter</option><option>Meeting Notice</option><option>Board Resolution</option></select></div>
+     <div class="field"><label>Letter Number</label><input id="letterNo" placeholder="e.g. KMB/2026/001"></div>
+     <div class="field"><label>Date</label><input id="letterDate" type="date"></div>
+     <div class="field"><label>To / Recipient</label><input id="letterTo" placeholder="Name and designation"></div>
+     <div class="field full"><label>Subject</label><input id="letterSubject" placeholder="Enter subject"></div>
+    </div>
+    <div class="field"><label>Letter Content</label><textarea id="letterBody" class="editor"></textarea></div>
+    <div class="field"><label>Signatory / Designation</label><input id="letterSign" value="Executive Officer"></div>
+    <div class="hint">Use Print / Save PDF and choose “Save as PDF” in your browser's print dialog. Saved letters are stored in the Drive records database.</div>
+   </div>
+   <div class="panel" style="margin-top:16px"><h3>Saved Letters</h3><div id="savedLetters"></div></div>
+  </section>
+
+  <section class="page" id="files">
+   <div class="toolbar"><div><h2 style="margin:0;color:var(--navy)">File Register</h2><div class="muted small">Register and track office files</div></div><button class="btn" onclick="openRegisterModal('file')">+ Add File</button></div>
+   <div class="table-wrap"><table><thead><tr><th>File No.</th><th>Subject / Title</th><th>Opening Date</th><th>Department / Section</th><th>Status</th><th>Action</th></tr></thead><tbody id="fileRows"></tbody></table></div>
+  </section>
+
+  <section class="page" id="incoming">
+   <div class="toolbar"><div><h2 style="margin:0;color:var(--navy)">Incoming Register</h2><div class="muted small">Letters and documents received by the office</div></div><button class="btn" onclick="openRegisterModal('incoming')">+ Receive Letter</button></div>
+   <div class="table-wrap"><table><thead><tr><th>Receipt No.</th><th>Received Date</th><th>Letter No. / Date</th><th>From</th><th>Subject</th><th>Action</th></tr></thead><tbody id="incomingRows"></tbody></table></div>
+  </section>
+
+  <section class="page" id="outgoing">
+   <div class="toolbar"><div><h2 style="margin:0;color:var(--navy)">Outgoing Register</h2><div class="muted small">Letters dispatched from the office</div></div><button class="btn" onclick="openRegisterModal('outgoing')">+ Dispatch Letter</button></div>
+   <div class="table-wrap"><table><thead><tr><th>Dispatch No.</th><th>Date</th><th>Letter No.</th><th>To</th><th>Subject</th><th>Mode</th><th>Action</th></tr></thead><tbody id="outgoingRows"></tbody></table></div>
+  </section>
+
+  <section class="page" id="documents">
+   <div class="toolbar"><div><h2 style="margin:0;color:var(--navy)">Document Archive</h2><div class="muted small">Upload PDF files to a folder in your Google Drive</div></div><label class="btn" style="margin:0">+ Upload PDF<input id="pdfUpload" type="file" accept="application/pdf,.pdf" multiple hidden></label></div>
+   <div class="notice">PDFs are uploaded to a Google Drive folder named <b>Municipal Office Manager</b>. The app stores their file details in your records database.</div>
+   <div class="table-wrap"><table><thead><tr><th>Document Name</th><th>Category</th><th>Uploaded</th><th>Drive File</th><th>Action</th></tr></thead><tbody id="documentRows"></tbody></table></div>
+  </section>
+
+  <section class="page" id="search">
+   <div class="panel"><h2>Search Office Records</h2><div class="toolbar"><div style="flex:1;min-width:220px"><input id="searchQuery" placeholder="Search file number, subject, sender, recipient, letter text..." oninput="renderSearch()"></div><select id="searchType" style="max-width:190px" onchange="renderSearch()"><option value="all">All records</option><option value="letters">Letters</option><option value="files">File register</option><option value="incoming">Incoming</option><option value="outgoing">Outgoing</option><option value="documents">Documents</option></select></div><div id="searchResults"></div></div>
+  </section>
+
+  <section class="page" id="backup">
+   <div class="panel"><h2>Backup & Restore</h2><p class="muted">Export a copy of your office database to your computer, or restore a previously exported JSON backup.</p><div class="actions" style="margin:18px 0"><button class="btn" onclick="exportBackup()">Download JSON Backup</button><label class="btn secondary" style="margin:0">Restore JSON Backup<input type="file" id="restoreFile" accept=".json,application/json" hidden></label><button class="btn secondary" onclick="syncNow()">Sync with Google Drive</button></div><div class="notice">Backup includes register entries and saved letter text. PDF attachments remain in your Google Drive folder and are not embedded in the JSON backup.</div><div id="backupInfo" class="muted small"></div></div>
+  </section>
+
+  <section class="page" id="settings">
+   <div class="panel"><h2>Google Drive Connection</h2><p class="muted">This single-file app uses Google Identity Services and the Google Drive API. It does not ask for or store your Google password.</p>
+    <div class="notice"><b>One-time setup:</b> In Google Cloud Console, create/select a project, enable Google Drive API, configure the OAuth consent screen, create an OAuth Client ID of type “Web application”, and add the website origin to Authorized JavaScript origins. Paste the Client ID below.</div>
+    <div class="field"><label>Google OAuth Client ID</label><input id="clientId" placeholder="123456789-abc....apps.googleusercontent.com"></div>
+    <div class="field"><label>Drive storage folder name</label><input id="folderName" value="Municipal Office Manager"></div>
+    <div class="actions"><button class="btn" onclick="saveSettings()">Save Settings</button><button class="btn secondary" onclick="connectDrive()">Connect Google Drive</button><button class="btn danger" onclick="disconnectDrive()">Disconnect</button></div>
+    <p class="hint">Recommended scope: https://www.googleapis.com/auth/drive.file. The app can create and manage files it creates or that you explicitly open with it. Use a trusted computer and keep regular backups.</p>
+   </div>
+  </section>
+ </div>
+</main>
+</div>
+
+<div class="modal-backdrop" id="registerModal">
+ <div class="modal">
+  <div class="modal-head"><h2 id="modalTitle">Add Register Entry</h2><button class="close" onclick="closeModal()">✕</button></div>
+  <form id="registerForm">
+   <div id="modalFields" class="form-grid"></div>
+   <div class="actions"><button class="btn" type="submit">Save Record</button><button class="btn secondary" type="button" onclick="closeModal()">Cancel</button></div>
+  </form>
+ </div>
+</div>
+<div class="toast" id="toast"></div>
+<div id="printArea" class="hidden"></div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+/* MUNICIPAL OFFICE MANAGER
+   Drive database is one JSON file in the configured Drive folder.
+   PDF attachments are stored as separate Drive files.
+*/
+const DB_FILE='office-records.json';
+const DEFAULT_DB={letters:[],files:[],incoming:[],outgoing:[],documents:[],updatedAt:null};
+let db=structuredClone(DEFAULT_DB), accessToken=null, driveFolderId=null, dbDriveFileId=null;
+let activeRegister='file', editingId=null;
+const $=id=>document.getElementById(id);
+const settings=()=>({clientId:localStorage.getItem('mom_client_id')||'',folderName:localStorage.getItem('mom_folder_name')||'Municipal Office Manager'});
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+function navigate(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===page));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('pageTitle').textContent=({dashboard:'Dashboard',letters:'Letter Writing',files:'File Register',incoming:'Incoming Register',outgoing:'Outgoing Register',documents:'Document Archive',search:'Search Records',backup:'Backup & Restore',settings:'Drive Settings'})[page]||page;$('navMenu')?.classList.remove('show');if(page==='dashboard')renderDashboard();if(page==='letters')renderLetters();if(page==='files')renderFiles();if(page==='incoming')renderIncoming();if(page==='outgoing')renderOutgoing();if(page==='documents')renderDocuments();if(page==='search')renderSearch();if(page==='backup')renderBackupInfo()}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
+$('connectBtn').addEventListener('click',connectDrive);
+function saveSettings(){localStorage.setItem('mom_client_id',$('clientId').value.trim());localStorage.setItem('mom_folder_name',$('folderName').value.trim()||'Municipal Office Manager');toast('Settings saved on this browser.');}
+function loadSettings(){const s=settings();$('clientId').value=s.clientId;$('folderName').value=s.folderName}
+function setDriveStatus(ok,msg){$('driveStatus').textContent=msg;$('driveStatus').className='status '+(ok?'ok':'bad');$('connectBtn').textContent=ok?'Drive Connected':'Connect Google Drive'}
+function disconnectDrive(){accessToken=null;driveFolderId=null;dbDriveFileId=null;setDriveStatus(false,'Disconnected');toast('Disconnected. Your Drive files are unchanged.')}
+function connectDrive(){saveSettings();const clientId=settings().clientId;if(!clientId){navigate('settings');toast('Enter your Google OAuth Client ID first.');return}if(!window.google?.accounts?.oauth2){toast('Google sign-in library is still loading. Please try again.');return}
+ const client=google.accounts.oauth2.initTokenClient({client_id:clientId,scope:'https://www.googleapis.com/auth/drive.file',callback:async(resp)=>{if(resp.error){toast('Google authorization failed: '+resp.error);return}accessToken=resp.access_token;try{await initializeDrive();setDriveStatus(true,'Connected to Google Drive');toast('Google Drive connected.');renderAll()}catch(e){setDriveStatus(false,'Drive error');toast(e.message)}}});client.requestAccessToken({prompt:'consent'});
+}
+async function driveRequest(url,options={}){if(!accessToken)throw new Error('Connect Google Drive first.');const headers=new Headers(options.headers||{});headers.set('Authorization','Bearer '+accessToken);const res=await fetch(url,{...options,headers});if(!res.ok){let msg=await res.text();throw new Error('Drive API '+res.status+': '+msg.slice(0,250))}if(res.status===204)return null;const type=res.headers.get('content-type')||'';return type.includes('application/json')?res.json():res}
+async function initializeDrive(){const name=settings().folderName.replace(/'/g,"\\'");const q=encodeURIComponent(`mimeType='application/vnd.google-apps.folder' and name='${name}' and trashed=false`);const found=await driveRequest(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)&pageSize=100`);driveFolderId=found.files?.[0]?.id;if(!driveFolderId){const folder=await driveRequest('https://www.googleapis.com/drive/v3/files?fields=id,name',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:settings().folderName,mimeType:'application/vnd.google-apps.folder'})});driveFolderId=folder.id}
+ const qdb=encodeURIComponent(`'${driveFolderId}' in parents and name='${DB_FILE}' and trashed=false`);const list=await driveRequest(`https://www.googleapis.com/drive/v3/files?q=${qdb}&fields=files(id,name)&pageSize=10`);dbDriveFileId=list.files?.[0]?.id||null;
+ if(dbDriveFileId){const data=await driveRequest(`https://www.googleapis.com/drive/v3/files/${dbDriveFileId}?alt=media`);db=normalizeDB(data)}else{db=structuredClone(DEFAULT_DB);await saveDB()}
+}
+function normalizeDB(data){const x={...DEFAULT_DB,...(data||{})};for(const k of Object.keys(DEFAULT_DB))if(Array.isArray(DEFAULT_DB[k]))x[k]=Array.isArray(x[k])?x[k]:[];return x}
+async function saveDB(){if(!accessToken||!driveFolderId){toast('Connect Google Drive to save records.');return false}db.updatedAt=new Date().toISOString();const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const metadata={name:DB_FILE,mimeType:'application/json',parents:[driveFolderId]};let url,method;if(dbDriveFileId){url=`https://www.googleapis.com/upload/drive/v3/files/${dbDriveFileId}?uploadType=multipart`;method='PATCH'}else{url='https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id';method='POST'}
+ const boundary='mom_'+Date.now();const body=new Blob(['--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(metadata)+'\r\n--'+boundary+'\r\nContent-Type: application/json\r\n\r\n',blob,'\r\n--'+boundary+'--'],{type:'multipart/related; boundary='+boundary});const result=await driveRequest(url,{method,headers:{'Content-Type':'multipart/related; boundary='+boundary},body});if(result?.id)dbDriveFileId=result.id;return true}
+async function syncNow(){try{await saveDB();toast('Records synced to Google Drive.')}catch(e){toast(e.message)}}
+function renderAll(){renderDashboard();renderLetters();renderFiles();renderIncoming();renderOutgoing();renderDocuments();renderSearch();renderBackupInfo()}
+function renderDashboard(){$('statFiles').textContent=db.files.length;$('statLetters').textContent=db.letters.length;$('statIncoming').textContent=db.incoming.length;$('statOutgoing').textContent=db.outgoing.length;const all=[...db.letters.map(x=>({date:x.createdAt,label:'Letter: '+(x.subject||'Untitled')})),...db.files.map(x=>({date:x.createdAt,label:'File: '+x.title})),...db.incoming.map(x=>({date:x.createdAt,label:'Incoming: '+x.subject})),...db.outgoing.map(x=>({date:x.createdAt,label:'Outgoing: '+x.subject}))].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,7);$('recentActivity').innerHTML=all.length?all.map(x=>`<p style="padding:8px 0;border-bottom:1px solid var(--line)"><b>${esc(x.label)}</b><br><span class="small muted">${fmtDate(x.date)}</span></p>`).join(''):'No records yet. Use Quick Actions to begin.'}
+function esc(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmtDate(v){if(!v)return '—';const d=new Date(v);return isNaN(d)?esc(v):d.toLocaleDateString('en-IN')}
+function uid(){return crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)}
+function emptyRow(cols,msg){return `<tr><td colspan="${cols}" class="empty">${msg}</td></tr>`}
+function renderLetters(){$('savedLetters').innerHTML=db.letters.length?`<div class="table-wrap"><table><thead><tr><th>Letter No.</th><th>Date</th><th>Type</th><th>Subject</th><th>Actions</th></tr></thead><tbody>${db.letters.map(x=>`<tr><td>${esc(x.number)}</td><td>${fmtDate(x.date)}</td><td>${esc(x.type)}</td><td>${esc(x.subject)}</td><td><div class="actions"><button class="btn secondary" onclick="editLetter('${x.id}')">Open</button><button class="btn danger" onclick="deleteRecord('letters','${x.id}')">Delete</button></div></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No saved letters yet.</div>'}
+function newLetter(){['letterNo','letterTo','letterSubject'].forEach(id=>$(id).value='');$('letterDate').value=new Date().toISOString().slice(0,10);$('letterType').value='Official Letter';$('letterSign').value='Executive Officer';$('letterBody').value=templates['Official Letter'];editingId=null}
+const templates={
+'Official Letter':`To,\nThe ______________________\n__________________________\n\nSubject: ______________________________\n\nSir/Madam,\n\nWith reference to the subject cited above, I would like to state that ________________________________________________.\n\nYou are therefore requested to take necessary action in this regard.\n\nYours faithfully,\n`,
+'Office Order':`OFFICE ORDER\n\nIn the interest of public service and for smooth functioning of office work, the following order is hereby issued with immediate effect:\n\n1. ________________________________________________\n2. ________________________________________________\n\nThis order shall come into force with immediate effect.\n`,
+'Notice':`NOTICE\n\nThis is for information of all concerned that ________________________________________________.\n\nAll concerned are requested to take note of the above and act accordingly.\n`,
+'Memo':`MEMORANDUM\n\nSubject: __________________________________________\n\nThe matter regarding __________________________________ is hereby brought to the notice of all concerned for information and necessary action.\n`,
+'Forwarding Letter':`To,\nThe ______________________\n\nSubject: Forwarding of ______________________________\n\nSir/Madam,\n\nI am forwarding herewith the following document(s) for your kind information and necessary action:\n\n1. ________________________________________________\n\nThis is submitted for favour of your kind information and necessary action.\n`,
+'Meeting Notice':`MEETING NOTICE\n\nA meeting regarding __________________________________ is scheduled as per the details below:\n\nDate: __________________\nTime: __________________\nVenue: _________________\n\nAll concerned are requested to attend the meeting positively.\n`,
+'Board Resolution':`CERTIFIED COPY OF THE RESOLUTION\n\nThe Board of the __________________ Municipal Board, in its meeting held on __________, discussed the matter regarding ______________________________.\n\nAfter due deliberation, the Board resolved that ________________________________________________.\n\nThe resolution is adopted for necessary action.\n`
+};
+function applyTemplate(){if(!$('letterBody').value.trim()||confirm('Replace the current letter content with the selected template?'))$('letterBody').value=templates[$('letterType').value]||''}
+function collectLetter(){return{id:editingId||uid(),type:$('letterType').value,number:$('letterNo').value.trim(),date:$('letterDate').value,to:$('letterTo').value.trim(),subject:$('letterSubject').value.trim(),body:$('letterBody').value,sign:$('letterSign').value.trim(),createdAt:new Date().toISOString()}}
+async function saveLetter(){const x=collectLetter();if(!x.subject&&!x.body.trim()){toast('Enter a subject or letter content.');return}const i=db.letters.findIndex(y=>y.id===x.id);if(i>=0)db.letters[i]=x;else db.letters.unshift(x);try{await saveDB();editingId=x.id;renderAll();toast('Letter saved to Google Drive.')}catch(e){toast(e.message)}}
+function editLetter(id){const x=db.letters.find(y=>y.id===id);if(!x)return;editingId=id;$('letterType').value=x.type;$('letterNo').value=x.number;$('letterDate').value=x.date;$('letterTo').value=x.to;$('letterSubject').value=x.subject;$('letterBody').value=x.body;$('letterSign').value=x.sign;navigate('letters')}
+function printLetter(){const x=collectLetter();$('printArea').innerHTML=`<div class="letter-paper"><div style="text-align:center;border-bottom:2px solid #222;padding-bottom:12px;margin-bottom:25px"><h2>MUNICIPAL OFFICE</h2><p>Official Correspondence</p></div><p style="text-align:right">Letter No.: ${esc(x.number)}<br>Date: ${esc(x.date)}</p><p><b>To,</b><br>${esc(x.to).replace(/\n/g,'<br>')}</p><p><b>Subject: ${esc(x.subject)}</b></p><div style="white-space:pre-wrap;margin-top:20px">${esc(x.body)}</div><p style="margin-top:55px"><b>${esc(x.sign)}</b><br>Municipal Office</p></div>`;$('printArea').classList.remove('hidden');window.print();setTimeout(()=>$('printArea').classList.add('hidden'),1000)}
+function openRegisterModal(type){activeRegister=type;editingId=null;$('registerForm').reset();$('modalTitle').textContent=type==='file'?'Add Office File':type==='incoming'?'Receive Incoming Letter':'Dispatch Outgoing Letter';const fields={
+file:[['File Number','number','fileNo'],['Subject / Title','text','title'],['Opening Date','date','date'],['Department / Section','text','section'],['Status','select','status',['Open','Pending','Closed','Archived']],['Remarks','textarea','remarks']],
+incoming:[['Receipt Number','text','receiptNo'],['Received Date','date','date'],['Letter Number / Date','text','letterRef'],['Received From','text','from'],['Subject','text','subject'],['Marked To / Section','text','markedTo'],['Remarks','textarea','remarks']],
+outgoing:[['Dispatch Number','text','dispatchNo'],['Dispatch Date','date','date'],['Letter Number','text','letterNo'],['Sent To','text','to'],['Subject','text','subject'],['Mode of Dispatch','select','mode',['By Hand','Post','Email','Special Messenger','Other']],['Reference / Remarks','textarea','remarks']]};
+$('modalFields').innerHTML=fields[type].map(f=>{let input=f[1]==='select'?`<select id="f_${f[2]}">${f[3].map(v=>`<option>${v}</option>`).join('')}</select>`:f[1]==='textarea'?`<textarea id="f_${f[2]}"></textarea>`:`<input id="f_${f[2]}" type="${f[1]}" ${f[1]==='date'?`value="${new Date().toISOString().slice(0,10)}"`:''}>`;return `<div class="field ${f[1]==='textarea'?'full':''}"><label>${f[0]}</label>${input}</div>`}).join('');$('registerModal').classList.add('show')}
+function closeModal(){$('registerModal').classList.remove('show')}
+$('registerForm').addEventListener('submit',async e=>{e.preventDefault();const ids={file:['fileNo','title','date','section','status','remarks'],incoming:['receiptNo','date','letterRef','from','subject','markedTo','remarks'],outgoing:['dispatchNo','date','letterNo','to','subject','mode','remarks']}[activeRegister];const x={id:uid(),createdAt:new Date().toISOString()};ids.forEach(k=>x[k]=$('f_'+k)?.value||'');db[activeRegister==='file'?'files':activeRegister].unshift(x);try{await saveDB();closeModal();renderAll();toast('Register entry saved to Google Drive.')}catch(err){toast(err.message)}});
+function renderFiles(){$('fileRows').innerHTML=db.files.length?db.files.map(x=>`<tr><td>${esc(x.fileNo)}</td><td>${esc(x.title)}</td><td>${fmtDate(x.date)}</td><td>${esc(x.section)}</td><td><span class="pill">${esc(x.status)}</span></td><td><button class="btn danger" onclick="deleteRecord('files','${x.id}')">Delete</button></td></tr>`).join(''):emptyRow(6,'No file register entries.')}
+function renderIncoming(){$('incomingRows').innerHTML=db.incoming.length?db.incoming.map(x=>`<tr><td>${esc(x.receiptNo)}</td><td>${fmtDate(x.date)}</td><td>${esc(x.letterRef)}</td><td>${esc(x.from)}</td><td>${esc(x.subject)}</td><td><button class="btn danger" onclick="deleteRecord('incoming','${x.id}')">Delete</button></td></tr>`).join(''):emptyRow(6,'No incoming letters recorded.')}
+function renderOutgoing(){$('outgoingRows').innerHTML=db.outgoing.length?db.outgoing.map(x=>`<tr><td>${esc(x.dispatchNo)}</td><td>${fmtDate(x.date)}</td><td>${esc(x.letterNo)}</td><td>${esc(x.to)}</td><td>${esc(x.subject)}</td><td>${esc(x.mode)}</td><td><button class="btn danger" onclick="deleteRecord('outgoing','${x.id}')">Delete</button></td></tr>`).join(''):emptyRow(7,'No outgoing letters recorded.')}
+async function deleteRecord(collection,id){if(!confirm('Delete this record permanently from the office database?'))return;db[collection]=db[collection].filter(x=>x.id!==id);try{await saveDB();renderAll();toast('Record deleted.')}catch(e){toast(e.message)}}
+$('pdfUpload').addEventListener('change',async e=>{const files=[...e.target.files];if(!files.length)return;if(!accessToken||!driveFolderId){toast('Connect Google Drive before uploading.');e.target.value='';return}for(const file of files){if(file.type!=='application/pdf'&&!file.name.toLowerCase().endsWith('.pdf')){toast('Only PDF files are allowed.');continue}try{const meta={name:file.name,mimeType:'application/pdf',parents:[driveFolderId]};const boundary='pdf_'+Date.now()+Math.random().toString(16).slice(2);const body=new Blob(['--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+'\r\n--'+boundary+'\r\nContent-Type: application/pdf\r\n\r\n',file,'\r\n--'+boundary+'--'],{type:'multipart/related; boundary='+boundary});const result=await driveRequest('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,webViewLink',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+boundary},body});db.documents.unshift({id:uid(),driveId:result.id,name:file.name,category:'PDF',uploadedAt:new Date().toISOString(),webViewLink:result.webViewLink||''});await saveDB();toast('Uploaded '+file.name)}catch(err){toast(err.message)}}e.target.value='';renderDocuments()});
+function renderDocuments(){$('documentRows').innerHTML=db.documents.length?db.documents.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.category)}</td><td>${fmtDate(x.uploadedAt)}</td><td>${x.driveId?`<a class="file-link" href="https://drive.google.com/file/d/${encodeURIComponent(x.driveId)}/view" target="_blank" rel="noopener">Open in Drive</a>`:'—'}</td><td><button class="btn danger" onclick="deleteRecord('documents','${x.id}')">Remove record</button></td></tr>`).join(''):emptyRow(5,'No PDF documents uploaded.')}
+function renderSearch(){const q=($('searchQuery')?.value||'').toLowerCase().trim(),type=$('searchType')?.value||'all';const sets=[['letters','Letters',db.letters,x=>[x.number,x.type,x.subject,x.to,x.body].join(' ')],['files','Files',db.files,x=>[x.fileNo,x.title,x.section,x.remarks].join(' ')],['incoming','Incoming',db.incoming,x=>[x.receiptNo,x.letterRef,x.from,x.subject,x.markedTo].join(' ')],['outgoing','Outgoing',db.outgoing,x=>[x.dispatchNo,x.letterNo,x.to,x.subject,x.mode].join(' ')],['documents','Documents',db.documents,x=>[x.name,x.category].join(' ')]];let results=[];sets.filter(s=>type==='all'||s[0]===type).forEach(s=>s[2].forEach(x=>{if(!q||s[3](x).toLowerCase().includes(q))results.push({kind:s[1],title:x.subject||x.title||x.name||x.number||x.fileNo||x.receiptNo||x.dispatchNo||'Record',date:x.date||x.uploadedAt||x.createdAt,detail:s[3](x),collection:s[0],id:x.id})}));$('searchResults').innerHTML=results.length?`<div class="table-wrap"><table><thead><tr><th>Type</th><th>Record / Subject</th><th>Date</th><th>Action</th></tr></thead><tbody>${results.map(x=>`<tr><td><span class="pill">${x.kind}</span></td><td>${esc(x.title)}</td><td>${fmtDate(x.date)}</td><td><button class="btn secondary" onclick="openSearchResult('${x.collection}','${x.id}')">Open</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No matching records found.</div>'}
+function openSearchResult(c,id){if(c==='letters'){editLetter(id);return}navigate(c==='files'?'files':c==='incoming'?'incoming':c==='outgoing'?'outgoing':'documents')}
+function exportBackup(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='municipal-office-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);toast('Backup downloaded.')}
+$('restoreFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const parsed=normalizeDB(JSON.parse(await file.text()));if(!confirm('Replace the current office database with this backup?'))return;db=parsed;if(!accessToken){toast('Backup loaded in this browser session. Connect Drive and click Sync to save it.')}else{await saveDB();toast('Backup restored to Google Drive.')}renderAll()}catch(err){toast('Invalid backup file: '+err.message)}e.target.value=''});
+function renderBackupInfo(){$('backupInfo').textContent='Last database update: '+(db.updatedAt?new Date(db.updatedAt).toLocaleString('en-IN'):'Not yet saved')+' • Letters: '+db.letters.length+' • Files: '+db.files.length+' • PDFs: '+db.documents.length}
+loadSettings();newLetter();renderAll();setDriveStatus(false,'Not connected to Drive');
+</script>
+</body>
+</html>
